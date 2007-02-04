@@ -9,7 +9,7 @@ Package: vim-addon-manager
 Architecture: all
 Depends: ruby, ${misc:Depends}
 Recommends: vim-tiny | vim | gvim
-Description: command line manager of Vim addons
+Description: manager of addons for the Vim editor
  vim-addon-manager is a tool for managing addons for the Vim
  editor.
  .
