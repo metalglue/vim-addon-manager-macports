@@ -1,0 +1,24 @@
+Source: vim-addon-manager
+Section: editors
+Priority: extra
+Maintainer: Stefano Zacchiroli <zack@debian.org>
+Build-Depends: cdbs, debhelper (>= 5), rdtool
+Standards-Version: 3.7.2
+
+Package: vim-addon-manager
+Architecture: all
+Depends: ruby, ${misc:Depends}
+Recommends: vim-tiny | vim | gvim
+Description: command line manager of Vim addons
+ vim-addon-manager is a tool for managing addons for the Vim
+ editor.
+ .
+ Using the vim-addons command line the user can list the addons
+ installed on its system (i.e. which are registered in the vim
+ addons registry) and install or uninstall each of them in its
+ per-user configuration directory (~/.vim).
+ .
+ Override of addons which are enabled per default on the system,
+ so that they are not enabled for the current user, is possible
+ too.
+

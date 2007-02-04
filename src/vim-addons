@@ -1,0 +1,219 @@
+#!/usr/bin/ruby -w
+#
+# vim-addons: command line manager of Vim addons
+#
+# Copyright (C) 2007 Stefano Zacchiroli
+#
+# This program is free software, you can redistribute it and/or modify it under
+# the terms of the GNU General Public License version 2 as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.
+#
+# Created:    Tue, 16 Jan 2007 10:04:20 +0100 zack
+# Last-Modified:  $Id: vim-addons 872 2007-01-28 18:31:41Z zack $
+#
+# TODO: create a vim-addons-manager package shipping vim-addons
+# TODO: rework the README.Debian of vim-scripts pointing to vim-addons
+#
+
+=begin
+
+== NAME
+
+vim-addons - command line manager of Vim add-ons
+
+== SYNOPSIS
+
+vim-addons [OPTION ...] { list | status | install | remove | disable | amend | files } [ADDON ...]
+
+== DESCRIPTION
+
+Manage Vim addons installed system-wide, enabling on a per-user basis their
+installation, removal, ...
+
+vim-addons is capable of managing all Vim addons registered in the system-wide
+registry of Vim addons (see vim-registry(5)). Each system-wide addon can be,
+with respect to a user Vim configuration, in one of the following states:
+
+:installed
+  all of the files composing the addon are installed (i.e. symlinked) somewhere
+  under ~/.vim. The addon is fully functional for the current user
+
+:removed
+  the files composing the addon are not installed under ~/.vim. The addon might
+  still be working for the current user if it is installed system-wide by the
+  local administrator
+
+:disabled
+  the files composing the addon are not installed under ~/.vim, but the addon
+  is installed system-wide. However, the addon has been disabled for the
+  current user explicitely requiring so via some configuration line in
+  ~/.vim/plugin/vim-addons.vim. The addon is not working for the current user
+
+:broken
+  only some of the files composing the addon are installed under ~/.vim. The
+  addon is probably not working for the current user
+
+The following commands can be given to vim-addons to inspect or alter the
+status of the addons:
+
+:list
+  list, one per line, the names of the addons available in the system (i.e. of
+  all the addons mentioned in the registry, not necessarily of all enabled
+  addons)
+
+:status
+  show, one per line, the status of the addons available in the system. If one
+  or more addon arguments are specified only show the status of those addons
+
+:install
+  install one or more addons under ~/.vim. Requires at least one addon argument
+
+:remove
+  remove one or more addons from ~/.vim. Requires at least one addon argument
+
+:disable
+  disable one or more addons to be used by the current user. Usually used for
+  addons which are system-wide enabled by the local administrator but that the
+  current user does not want to be used. Using this command will automatically
+  change the content of ~/.vim/plugin/vim-addons.vim, probably adding let
+  definitions which will inhibit the given addon to be used. Requires at least
+  one addon argument
+
+:amend
+  undo the effects of a previous disable command. Requires at least one addon
+  argument
+
+:files
+  linst, one per line, the files composing the specified addons. Files are
+  listed relative to components of the Vim runtimepath (see 'runtimepath' in
+  the Vim help). Requires at least one addon argument
+
+== OPTIONS
+
+All commands accept the following options:
+
+:-h, --help
+  show this usage message and exit
+
+:-r, --registry-dir
+  set the registry directory (default: /usr/share/vim/registry)
+
+:-s, --source-dir
+  set the addons source directory (default: /usr/share/vim/addons)
+
+:-t, --target-dir
+  set the addons target directory (default: $HOME/.vim)
+
+:-v, --verbose
+  increase verbosity level
+
+:-w, --system-dir
+  set the system-wide target directory (default: /var/lib/vim/addons)
+
+== AUTHOR
+
+Stefano Zacchiroli <zack@debian.org>
+
+== SEE ALSO
+
+vim(1), vim-registry(5)
+
+== COPYRIGHT
+
+Copyright (C) 2007 Stefano Zacchiroli
+
+This program is free software, you can redistribute it and/or modify it under
+the terms of the GNU General Public License version 2 as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+
+=end
+
+require 'getoptlong'
+
+require 'vim/addon-manager'
+require 'vim/common'
+require 'vim/registry'
+
+def die_usage
+  print <<EOS
+Usage:
+  vim-addons [OPTION ...] { list | status | install | remove | disable | amend | files } [ADDON ...]
+Options:
+  -h, --help          show this usage message and exit
+  -r, --registry-dir  set the registry directory
+                        (default: /usr/share/vim/registry)
+  -s, --source-dir    set the addons source directory
+                        (default: /usr/share/vim/addons)
+  -t, --target-dir    set the addons target directory
+                        (default: $HOME/.vim)
+  -v, --verbose       increase verbosity
+  -w, --system-dir    set the system-wide target directory
+                        (default: /var/lib/vim/addons)
+EOS
+  exit 1
+end
+
+def parse_cmdline
+  options = { # defaults
+    :registry_dir => '/usr/share/vim/registry',
+    :source_dir => '/usr/share/vim/addons',
+    :system_dir => '/var/lib/vim/addons',
+    :target_dir => File.join(ENV['HOME'], '.vim'),
+  }
+  cmds = %w{install remove disable amend list status files}
+  req_arg_cmds = # commands requiring >= 1 arg
+    %w{install remove disable amend files}
+  cmdline =
+    GetoptLong.new(['--help', '-h', GetoptLong::NO_ARGUMENT],
+                   ['--registry-dir', '-r', GetoptLong::REQUIRED_ARGUMENT],
+                   ['--source-dir', '-s', GetoptLong::REQUIRED_ARGUMENT],
+                   ['--target-dir', '-t', GetoptLong::REQUIRED_ARGUMENT],
+                   ['--verbose', '-v', GetoptLong::NO_ARGUMENT],
+                   ['--system-dir', '-w', GetoptLong::REQUIRED_ARGUMENT])
+  cmdline.each do |opt, arg|
+    case opt
+    when '--help'
+      die_usage
+    when '--registry-dir'
+      options[:registry_dir] = arg
+    when '--source-dir'
+      options[:source_dir] = arg
+    when '--target-dir'
+      options[:target_dir] = arg
+    when '--verbose'
+      Vim.increase_verbosity
+    when '--system-dir'
+      options[:system_dir] = arg
+    end
+  end
+  die_usage unless cmd = ARGV.shift
+  die_usage unless cmds.member? cmd
+  die_usage if req_arg_cmds.member? cmd and ARGV.empty?
+  [cmd, ARGV, options]
+end
+
+cmd, args, options = parse_cmdline
+registry = Vim::AddonRegistry.new(options[:registry_dir], options[:source_dir])
+selected_addons =
+  args.empty? ? registry.to_a : registry.select {|a| args.member? a.name}
+unknown = args.select {|name| not (registry.any? {|a| a.name == name})}
+Vim.warn "Ignoring unknown addons: #{unknown.join ', '}" unless unknown.empty?
+
+case cmd
+when 'list'
+  puts registry.sort
+when 'status'
+  printf("# %-25s%-13s%-14s\n", 'Name', 'User Status', 'System Status')
+  selected_addons.sort.each do |a|
+    printf("%-28s%-14s%-14s\n", a, a.status(options[:target_dir]),
+           a.status(options[:system_dir]))
+  end
+when 'files'
+  selected_addons.each {|a| puts a.files.to_a}
+else
+  mgr = Vim::AddonManager.new options[:source_dir], options[:target_dir]
+  mgr.send cmd, selected_addons
+end
+

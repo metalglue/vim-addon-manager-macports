@@ -1,0 +1,94 @@
+
+Handling of Vim Addons
+======================
+
+Vim "Addons"
+------------
+
+With "addon" we will refer to every additional (set of) feature that can be
+added to Vim using its extension mechanisms (color schemes, syntaxes,
+indentation, plugins, ftplugins, ...)
+
+Present Issues
+--------------
+
+Every vim addon is currently installed in /usr/share/vim/addons/, directory
+which is in the runtimepath. As a consequence every installed addon is always
+enabled. The only way to choose which ones to load is to override the
+runtimepath so that /usr/share/vim/addons/ is not listed and manually load the
+desired one.
+
+The "vim-scripts" package is an exception to this rule installing everything
+under /usr/share/vim-scripts/ and requiring (as documented in the package's
+README.Debian) the sysadm (resp. local user) to symlink the desired addons to a
+system-wide directory (resp. ~/.vim). That is to say that none of the
+vim-scripts addons are enabled per default.
+
+Proposed Solution
+-----------------
+
+Keep on installing addons under /usr/share/vim/addons/ (no changes are needed
+for all packages which ship addons), but remove this directory from the
+runtimepath. Adds a directory /var/vim/addons/ to the runtimepath and implement
+a flexible symlink mechanism (a-la /etc/init.d/) to selectively enable addons.
+
+Implementation
+--------------
+
+1 registry, 2 tools.
+
+### The Addon Registry
+
+The registry keep track of all installed vim addons, associating to each addon
+name a list of files that should be in the runtimepath for the addon to be
+enabled. E.g., an entry in the registry can be (in YAML syntax):
+
+  addon: utl
+  description: "Universal Text Linking: URL-based hyperlinking"
+  basedir: /usr/share/vim-scripts/
+  files:
+    - plugin/utl.vim
+    - doc/utl_ref.txt
+    - doc/utl_usr.txt
+    - plugin/utl_arr.vim
+    - plugin/utl_rc.vim
+    - plugin/utl_scm.vim
+    - plugin/utl_uri.vim
+
+A single package can ship more than one addon. Still, it is recommended that
+each package named vim-<name> installs a single addon called <name> so that its
+easier for the user to know the canonical name of addons. The "vim-scripts"
+package is an exception to this rule being conceived as a bundle of addons.
+
+### Tool 1: update-vim-addons
+
+The tool "update-vim-addons" (to be used by sysadms) consumes as input the
+configuration file /etc/vim/addons which lists, one per line, the name of the
+addons which should be system-wide enabled. The invocation of
+"update-vim-addons" is idempotent.  Result of the invocation is the setting of
+all the needed symlinks pointing from /var/vim/addons/ to /usr/share/vim/addons/
+(or alternatively to the basedir specified in registry entries), and of course
+the removal of all the no longer needed symlinks.
+
+Companion tools which automatically add/remove lines to /etc/vim/addons and then
+invoke update-vim-addons (a la apache-modconf) can be made available to be
+invoked by package postints.
+
+All packages shipping vim addons should have in their postinst scripts
+(conditional) invocations of the above companion tools so that, if the vim addon
+infrastructure is installed on the target machine, after the installation a
+given vim-addon is enabled per default. The invocation is conditional so that
+the installation of the addon infrastructure does not become a vim dependency
+(since vim itself ships some addons, e.g. matchit).
+
+### Tool 2: vim-addons
+
+The tool "vim-addons" (to be used by users) can be used to enable/disable addons
+on a per user basis. It provides also inspecting facilities (e.g.: list the
+available addons or query their status for the current user). It additionally
+provides an override mechanism that let the user enable for her addons which are
+disabled system-wide and prevent the usage of addons which are enabled
+system-wide.
+
+--
+Tue, 23 Jan 2007 11:40:29 +0100 zack

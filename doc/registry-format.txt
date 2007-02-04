@@ -1,0 +1,70 @@
+
+Vim Addon Registry
+==================
+
+On-Disk Format
+--------------
+
+The registry is stored on disk as a single directory directly (i.e. not in any
+sub-directory) containing a set of files in YAML [1] format. At the time of
+writing the directory containing the Vim addon registry is
+/usr/share/vim/registry/.
+
+Each file is a multi-document YAML file (i.e. it can be composed by several
+different YAML documents separated by "---" lines). Each YAML document represent
+a registry entry, that is the information describing a single addon.
+
+Ideally, the registry directory contains one file per package shipping addons;
+with a filename obeying to the convention PACKAGE-NAME.yaml. Hence a single
+package can contribute to the registry with multiple entries described in a
+single YAML file.
+
+For example, the "vim-scripts" package should ship a single
+/usr/share/vim/registry/vim-scripts.yaml file, containing one YAML document per
+shipped addon. The first lines of such file can look like the following (two
+space of indentation manually added to the present text file):
+
+  addon: alternate
+  description: "alternate pairing files (e.g. .c/.h) with short ex-commands"
+  basedir: /usr/share/vim-scripts/
+  files:
+    - plugin/a.vim
+    - doc/alternate.txt
+  ---
+  addon: whatdomain
+  description: "query the meaning of a Top Level Domain"
+  basedir: /usr/share/vim-scripts/
+  files:
+    - plugin/whatdomain.vim
+  ---
+
+Each registry entry may contain the following fields, to be typeset according to
+the YAML specification:
+
+  addon:
+  
+    name of the addon (required field)
+
+  description:
+  
+    human understandable textual description of the addon (required field)
+
+  files:
+  
+    list of the files which compose the addon and are required to be present in
+    a component of the Vim runtime path for the addon to be enabled.  Each file
+    is specified relative to a component of the Vim runtime path (required
+    field)
+
+  basedir:
+
+    directory where the files shipped by the addon (i.e. where the symlinks of
+    the user/sysadm should point to) reside on the filesystem (optional field,
+    default to: /usr/share/vim/addons)
+
+References
+----------
+
+[1] http://www.yaml.org/
+
+-- Tue, 23 Jan 2007 15:12:00 +0100 zack

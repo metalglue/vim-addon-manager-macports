@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+  
+include /usr/share/cdbs/1/rules/debhelper.mk
+
+common-build-indep:: debian/stamp-local-build
+debian/stamp-local-build::
+	make -C src/
+	touch $@
+
+clean:: local-clean
+local-clean::
+	make -C src/ clean
+	rm -rf debian/stamp-local-build
+
