@@ -1,6 +1,6 @@
-vim-addon-manager (0.1) UNRELEASED; urgency=low
+vim-addon-manager (0.1) experimental; urgency=low
 
   * Initial release (closes: #409627)
 
- -- Stefano Zacchiroli <zack@debian.org>  Sun,  4 Feb 2007 15:16:59 +0100
+ -- Stefano Zacchiroli <zack@debian.org>  Mon,  5 Feb 2007 00:32:42 +0100
 
