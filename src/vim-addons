@@ -12,7 +12,6 @@
 # Created:    Tue, 16 Jan 2007 10:04:20 +0100 zack
 # Last-Modified:  $Id: vim-addons 872 2007-01-28 18:31:41Z zack $
 #
-# TODO: create a vim-addons-manager package shipping vim-addons
 # TODO: rework the README.Debian of vim-scripts pointing to vim-addons
 #
 
