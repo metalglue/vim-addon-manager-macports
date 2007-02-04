@@ -12,8 +12,6 @@
 # Created:    Tue, 16 Jan 2007 10:04:20 +0100 zack
 # Last-Modified:  $Id: vim-addons 872 2007-01-28 18:31:41Z zack $
 #
-# TODO: rework the README.Debian of vim-scripts pointing to vim-addons
-#
 
 =begin
 
@@ -107,8 +105,12 @@ All commands accept the following options:
 :-v, --verbose
   increase verbosity level
 
-:-w, --system-dir
+:-y, --system-dir
   set the system-wide target directory (default: /var/lib/vim/addons)
+
+:-w, --system-wide
+  set the addons target directory to the system-wide target directory, possibly
+  overriding the -t option
 
 == AUTHOR
 
@@ -148,8 +150,10 @@ Options:
   -t, --target-dir    set the addons target directory
                         (default: $HOME/.vim)
   -v, --verbose       increase verbosity
-  -w, --system-dir    set the system-wide target directory
+  -y, --system-dir    set the system-wide target directory
                         (default: /var/lib/vim/addons)
+  -w, --system-wide   set target directory to the system-wide one
+                        (overrides -t setting)
 EOS
   exit 1
 end
@@ -157,9 +161,10 @@ end
 def parse_cmdline
   options = { # defaults
     :registry_dir => '/usr/share/vim/registry',
-    :source_dir => '/usr/share/vim/addons',
-    :system_dir => '/var/lib/vim/addons',
-    :target_dir => File.join(ENV['HOME'], '.vim'),
+    :source_dir   => '/usr/share/vim/addons',
+    :system_dir   => '/var/lib/vim/addons',
+    :target_dir   => File.join(ENV['HOME'], '.vim'),
+    :system_wide  => false
   }
   cmds = %w{install remove disable amend list status files}
   req_arg_cmds = # commands requiring >= 1 arg
@@ -170,7 +175,8 @@ def parse_cmdline
                    ['--source-dir', '-s', GetoptLong::REQUIRED_ARGUMENT],
                    ['--target-dir', '-t', GetoptLong::REQUIRED_ARGUMENT],
                    ['--verbose', '-v', GetoptLong::NO_ARGUMENT],
-                   ['--system-dir', '-w', GetoptLong::REQUIRED_ARGUMENT])
+                   ['--system-dir', '-y', GetoptLong::REQUIRED_ARGUMENT],
+                   ['--system-wide', '-w', GetoptLong::NO_ARGUMENT])
   cmdline.each do |opt, arg|
     case opt
     when '--help'
@@ -185,8 +191,11 @@ def parse_cmdline
       Vim.increase_verbosity
     when '--system-dir'
       options[:system_dir] = arg
+    when '--system-wide'
+      options[:system_wide] = true
     end
   end
+  options[:target_dir] = options[:system_dir] if options[:system_wide]
   die_usage unless cmd = ARGV.shift
   die_usage unless cmds.member? cmd
   die_usage if req_arg_cmds.member? cmd and ARGV.empty?
