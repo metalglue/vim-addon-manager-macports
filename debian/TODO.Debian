@@ -1,0 +1,10 @@
+
+  - if vim-addon-manager installs or removes something under doc/ dirs then run
+    helptags afterwards to recreate help tags
+
+  - add a "show" command to vim-addon-manager which describe the given set of
+    addons in the same spirit of "apt-cache show". Consider also computing some
+    derived information for a given addon like Installed-Size or so
+
+ -- Stefano Zacchiroli <zack@debian.org>  Wed, 07 Feb 2007 12:55:02 +0100
+

@@ -1,3 +1,10 @@
+vim-addon-manager (0.2) UNRELEASED; urgency=low
+
+  * debian/TODO.Debian
+    - create TODO file with a couple of items
+
+ -- Stefano Zacchiroli <zack@debian.org>  Wed,  7 Feb 2007 12:57:02 +0100
+
 vim-addon-manager (0.1) experimental; urgency=low
 
   * Initial release (closes: #409627)
