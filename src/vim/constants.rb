@@ -12,5 +12,6 @@
 module Vim
 
   OVERRIDE_FILE = 'plugin/000-vim-addons.vim'
+  HELPZTAGS = '/usr/bin/helpztags'
 
 end

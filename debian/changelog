@@ -1,9 +1,14 @@
 vim-addon-manager (0.2) UNRELEASED; urgency=low
 
-  * debian/TODO.Debian
-    - create TODO file with a couple of items
+  * vim-addons:
+    - when files are installed or removed under doc/ run helpztags afterwards
+      to regenerate help tags
+    - avoid performing an action when there is no need to perform it
+    - added feedback messages for the user
+  * debian/control
+    - added dependency on vim-common, which ships /usr/bin/helpztags
 
- -- Stefano Zacchiroli <zack@debian.org>  Wed,  7 Feb 2007 12:57:02 +0100
+ -- Stefano Zacchiroli <zack@debian.org>  Sat, 10 Feb 2007 18:17:08 +0100
 
 vim-addon-manager (0.1) experimental; urgency=low
 

@@ -12,6 +12,7 @@
 require 'fileutils'
 
 require 'vim/common'
+require 'vim/constants'
 
 module Vim
 
@@ -26,37 +27,54 @@ module Vim
     attr_accessor :target_dir
 
     def install(addons)
-      addons.each do |a|
-	base_dir = (a.basedir or @source_dir)
-	symlink = lambda do |f|
-	  dest = File.join(@target_dir, f)
+      installed_files = []
+      addons.each do |addon|
+	base_dir = (addon.basedir or @source_dir)
+	symlink = lambda do |file|
+	  dest = File.join(@target_dir, file)
 	  dest_dir = File.dirname dest
 	  FileUtils.mkdir_p dest_dir unless File.directory? dest_dir
-	  FileUtils.ln_sf(File.join(base_dir, f), dest)
+	  FileUtils.ln_sf(File.join(base_dir, file), dest)
 	end
-	status = a.status(@target_dir)
+	status = addon.status(@target_dir)
 	case status.status
 	when :broken
+	  Vim.info "installing broken addon '#{addon}'"
 	  status.missing_files.each(&symlink)
+          installed_files.concat(status.missing_files.to_a)
 	when :not_installed
-	  a.files.each(&symlink)
+	  Vim.info "installing removed addon '#{addon}'"
+	  addon.files.each(&symlink)
+          installed_files.concat(addon.files.to_a)
+        else
+          Vim.info "ignoring '#{addon}' which is neither removed nor broken"
 	end
       end
+      rebuild_tags(installed_files)
     end
 
     def remove(addons)
       # TODO remove empty directories (recursively toward the top of ~/.vim/,
       # a la rmdir -p)
-      rmlink = lambda {|f| File.delete(File.join(@target_dir, f)) }
-      addons.each do |a|
-	status = a.status(@target_dir)
+      removed_files = []
+      rmlink = lambda {|file| File.delete(File.join(@target_dir, file)) }
+      addons.each do |addon|
+	status = addon.status(@target_dir)
 	case status.status
 	when :installed
-	  a.files.each(&rmlink)
+	  Vim.info "removing installed addon '#{addon}'"
+	  addon.files.each(&rmlink)
+          removed_files.concat(addon.files.to_a)
 	when :broken
-	  (a.files - status.missing_files).each(&rmlink)
+	  Vim.info "removing broken addon '#{addon}'"
+          files = (addon.files - status.missing_files)
+	  files.each(&rmlink)
+          removed_files.concat(files.to_a)
+        else
+          Vim.info "ignoring '#{addon}' which is neither installed nor broken"
 	end
       end
+      rebuild_tags(removed_files)
     end
 
     def disable(addons)
@@ -64,10 +82,13 @@ module Vim
         addons.each do |addon|  # disable each not yet disabled addon
           if not addon.disabled_by_line
             Vim.warn \
-              "#{addon} can't be disabled (since it has no disabledby field)"
+              "#{addon} can't be disabled (since it has no 'disabledby' field)"
             next
           end
-          unless lines.any? {|line| addon.is_disabled_by? line}
+          if lines.any? {|line| addon.is_disabled_by? line}
+	    Vim.info "ignoring addon '#{addon}' which is already disabled"
+	  else
+	    Vim.info "disabling enabled addon '#{addon}'"
             lines << addon.disabled_by_line + "\n"
           end
         end
@@ -82,7 +103,12 @@ module Vim
               "#{addon} can't be amended (since it has no disabledby field)"
             next
           end
-          lines.reject! {|line| addon.is_disabled_by? line}
+	  if lines.any? {|line| addon.is_disabled_by? line}
+	    Vim.info "amending disabled addon '#{addon}'"
+	    lines.reject! {|line| addon.is_disabled_by? line}
+	  else
+	    Vim.info "ignoring addon '#{addon}' which is enabled"
+	  end
         end
       end
     end
@@ -107,6 +133,15 @@ module Vim
         File.open(override_file, 'w') do |file|
           file.write override_lines
         end
+      end
+    end
+
+    def rebuild_tags(files)
+      needs_rebuilding = files.any? {|file| file =~ /^doc\//}
+      if needs_rebuilding
+        Vim.info 'Rebuilding tags since documentation has been modified ...'
+        Vim.system "#{HELPZTAGS} #{@target_dir}"
+        Vim.info 'done.'
       end
     end
 

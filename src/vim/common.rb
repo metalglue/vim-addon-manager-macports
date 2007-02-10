@@ -33,6 +33,15 @@ module Vim
     def warn(s)
       puts "Warning: #{s}"
     end
+
+    def info(s)
+      puts "Info: #{s}"
+    end
+
+    def system(cmd)
+      info "executing '#{cmd}'" if verbose?
+      Kernel::system cmd
+    end
   end
 
 

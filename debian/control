@@ -7,7 +7,7 @@ Standards-Version: 3.7.2
 
 Package: vim-addon-manager
 Architecture: all
-Depends: ruby, ${misc:Depends}
+Depends: ruby, vim-common, ${misc:Depends}
 Recommends: vim-tiny | vim | gvim
 Description: manager of addons for the Vim editor
  vim-addon-manager is a tool for managing addons for the Vim
