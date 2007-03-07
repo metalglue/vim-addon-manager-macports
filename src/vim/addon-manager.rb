@@ -140,7 +140,7 @@ module Vim
       needs_rebuilding = files.any? {|file| file =~ /^doc\//}
       if needs_rebuilding
         Vim.info 'Rebuilding tags since documentation has been modified ...'
-        Vim.system "#{HELPZTAGS} #{@target_dir}"
+        Vim.system "#{HELPZTAGS} #{File.join(@target_dir, 'doc/')}"
         Vim.info 'done.'
       end
     end
