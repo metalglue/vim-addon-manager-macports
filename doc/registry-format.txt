@@ -67,4 +67,5 @@ References
 
 [1] http://www.yaml.org/
 
+Stefano Zacchiroli <zack@debian.org>
 -- Tue, 23 Jan 2007 15:12:00 +0100 zack

@@ -91,4 +91,5 @@ disabled system-wide and prevent the usage of addons which are enabled
 system-wide.
 
 --
+Stefano Zacchiroli <zack@debian.org>
 Tue, 23 Jan 2007 11:40:29 +0100 zack
