@@ -177,23 +177,27 @@ def parse_cmdline
                    ['--verbose', '-v', GetoptLong::NO_ARGUMENT],
                    ['--system-dir', '-y', GetoptLong::REQUIRED_ARGUMENT],
                    ['--system-wide', '-w', GetoptLong::NO_ARGUMENT])
-  cmdline.each do |opt, arg|
-    case opt
-    when '--help'
-      die_usage
-    when '--registry-dir'
-      options[:registry_dir] = arg
-    when '--source-dir'
-      options[:source_dir] = arg
-    when '--target-dir'
-      options[:target_dir] = arg
-    when '--verbose'
-      Vim.increase_verbosity
-    when '--system-dir'
-      options[:system_dir] = arg
-    when '--system-wide'
-      options[:system_wide] = true
+  begin
+    cmdline.each do |opt, arg|
+      case opt
+      when '--help'
+        die_usage
+      when '--registry-dir'
+        options[:registry_dir] = arg
+      when '--source-dir'
+        options[:source_dir] = arg
+      when '--target-dir'
+        options[:target_dir] = arg
+      when '--verbose'
+        Vim.increase_verbosity
+      when '--system-dir'
+        options[:system_dir] = arg
+      when '--system-wide'
+        options[:system_wide] = true
+      end
     end
+  rescue GetoptLong::Error
+    die_usage
   end
   options[:target_dir] = options[:system_dir] if options[:system_wide]
   die_usage unless cmd = ARGV.shift

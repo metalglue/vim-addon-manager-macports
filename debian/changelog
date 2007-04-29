@@ -1,15 +1,17 @@
-vim-addon-manager (0.2) UNRELEASED; urgency=low
+vim-addon-manager (0.2) unstable; urgency=low
 
+  * uploading to unstable
   * vim-addons:
     - when files are installed or removed under doc/ run helpztags afterwards
       to regenerate help tags
     - avoid performing an action when there is no need to perform it
     - added feedback messages for the user
+    - handle gracefully command line parsing errors (Closes: #420029)
   * debian/control
     - added dependency on vim-common, which ships /usr/bin/helpztags
     - added XS-Vcs-* fields
 
- -- Stefano Zacchiroli <zack@debian.org>  Mon, 19 Feb 2007 14:35:53 +0100
+ -- Stefano Zacchiroli <zack@debian.org>  Sun, 29 Apr 2007 11:29:11 +0200
 
 vim-addon-manager (0.1) experimental; urgency=low
 
