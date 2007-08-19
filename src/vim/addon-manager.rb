@@ -113,6 +113,15 @@ module Vim
       end
     end
 
+    def show(addons)
+      addons.each do |addon|
+        puts "Addon: #{addon}"
+        puts "Status: #{addon.status(@target_dir)}"
+        puts "Description: #{addon.description}"
+        puts ""
+      end
+    end
+
     private
     
     def map_override_lines

@@ -2,8 +2,11 @@ vim-addon-manager (0.3) UNRELEASED; urgency=low
 
   * debian/control
     - better long description
+  * vim-addons
+    - add 'show' command which show in a 822-like format a more detailed
+      report of each addons and its status (Closes: #438154)
 
- -- Stefano Zacchiroli <zack@debian.org>  Fri, 22 Jun 2007 09:34:58 +0100
+ -- Stefano Zacchiroli <zack@debian.org>  Sun, 19 Aug 2007 10:56:49 +0200
 
 vim-addon-manager (0.2) unstable; urgency=low
 

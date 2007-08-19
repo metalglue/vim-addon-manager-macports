@@ -21,7 +21,7 @@ vim-addons - command line manager of Vim add-ons
 
 == SYNOPSIS
 
-vim-addons [OPTION ...] { list | status | install | remove | disable | amend | files } [ADDON ...]
+vim-addons [OPTION ...] COMMAND [ADDON ...]
 
 == DESCRIPTION
 
@@ -51,8 +51,12 @@ with respect to a user Vim configuration, in one of the following states:
   only some of the files composing the addon are installed under ~/.vim. The
   addon is probably not working for the current user
 
-The following commands can be given to vim-addons to inspect or alter the
-status of the addons:
+=== COMMANDS
+
+A number of commands can be given to vim-addons to inspect or alter the status
+of the addons: list, status, install, remove, disable, amend, files, show.
+
+A description of the semantics of each command is reported below.
 
 :list
   list, one per line, the names of the addons available in the system (i.e. of
@@ -85,6 +89,9 @@ status of the addons:
   linst, one per line, the files composing the specified addons. Files are
   listed relative to components of the Vim runtimepath (see 'runtimepath' in
   the Vim help). Requires at least one addon argument
+
+:show
+  displays detailed information about the specified addons
 
 == OPTIONS
 
@@ -140,7 +147,9 @@ require 'vim/registry'
 def die_usage
   print <<EOS
 Usage:
-  vim-addons [OPTION ...] { list | status | install | remove | disable | amend | files } [ADDON ...]
+  vim-addons [OPTION ...] COMMAND [ADDON ...]
+Commands:
+  list, status, install, remove, disable, amend, files, show
 Options:
   -h, --help          show this usage message and exit
   -r, --registry-dir  set the registry directory
@@ -166,7 +175,7 @@ def parse_cmdline
     :target_dir   => File.join(ENV['HOME'], '.vim'),
     :system_wide  => false
   }
-  cmds = %w{install remove disable amend list status files}
+  cmds = %w{install remove disable amend list status files show}
   req_arg_cmds = # commands requiring >= 1 arg
     %w{install remove disable amend files}
   cmdline =
