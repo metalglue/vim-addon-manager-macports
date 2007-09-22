@@ -100,6 +100,9 @@ All commands accept the following options:
 :-h, --help
   show this usage message and exit
 
+:-q, --query
+  be quiet and make the output more parseable (for "status")
+
 :-r, --registry-dir
   set the registry directory (default: /usr/share/vim/registry)
 
@@ -152,6 +155,7 @@ Commands:
   list, status, install, remove, disable, amend, files, show
 Options:
   -h, --help          show this usage message and exit
+  -q, --query         be quiet and make the output more parseable
   -r, --registry-dir  set the registry directory
                         (default: /usr/share/vim/registry)
   -s, --source-dir    set the addons source directory
@@ -173,7 +177,8 @@ def parse_cmdline
     :source_dir   => '/usr/share/vim/addons',
     :system_dir   => '/var/lib/vim/addons',
     :target_dir   => File.join(ENV['HOME'], '.vim'),
-    :system_wide  => false
+    :query        => false,
+    :system_wide  => false,
   }
   cmds = %w{install remove disable amend list status files show}
   req_arg_cmds = # commands requiring >= 1 arg
@@ -183,6 +188,7 @@ def parse_cmdline
                    ['--registry-dir', '-r', GetoptLong::REQUIRED_ARGUMENT],
                    ['--source-dir', '-s', GetoptLong::REQUIRED_ARGUMENT],
                    ['--target-dir', '-t', GetoptLong::REQUIRED_ARGUMENT],
+                   ['--query', '-q', GetoptLong::NO_ARGUMENT],
                    ['--verbose', '-v', GetoptLong::NO_ARGUMENT],
                    ['--system-dir', '-y', GetoptLong::REQUIRED_ARGUMENT],
                    ['--system-wide', '-w', GetoptLong::NO_ARGUMENT])
@@ -197,6 +203,8 @@ def parse_cmdline
         options[:source_dir] = arg
       when '--target-dir'
         options[:target_dir] = arg
+      when '--query'
+        options[:query] = true
       when '--verbose'
         Vim.increase_verbosity
       when '--system-dir'
@@ -226,10 +234,17 @@ case cmd
 when 'list'
   puts registry.sort
 when 'status'
-  printf("# %-25s%-13s%-14s\n", 'Name', 'User Status', 'System Status')
-  selected_addons.sort.each do |a|
-    printf("%-28s%-14s%-14s\n", a, a.status(options[:target_dir]),
-           a.status(options[:system_dir]))
+  if options[:query]
+    selected_addons.sort.each do |a|
+      printf("%s\t%s\n", a, options[:system_wide] ? \
+             a.status(options[:system_dir]) : a.status(options[:target_dir]))
+    end
+  else
+    printf("# %-25s%-13s%-14s\n", 'Name', 'User Status', 'System Status')
+    selected_addons.sort.each do |a|
+      printf("%-28s%-14s%-14s\n", a, a.status(options[:target_dir]),
+             a.status(options[:system_dir]))
+    end
   end
 when 'files'
   selected_addons.each {|a| puts a.files.to_a}
