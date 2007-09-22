@@ -2,11 +2,18 @@ vim-addon-manager (0.3) UNRELEASED; urgency=low
 
   * debian/control
     - better long description
+  * debian/copyright
+    - change license to GPL 3 or above, fixed source file headers accordingly
   * vim-addons
     - add 'show' command which show in a 822-like format a more detailed
-      report of each addons and its status (Closes: #438154)
+      report of each addons and its status (closes: #438154)
+    - add '-q' option which make the output of the 'status' command more
+      parsable and only show addons wrt the current execution mode
+      (system-wide or not)
+  * add bash completion script contributed by Antonio Terceiro
+    (closes: #440843); fix debian/*.install accordingly
 
- -- Stefano Zacchiroli <zack@debian.org>  Sun, 19 Aug 2007 10:56:49 +0200
+ -- Stefano Zacchiroli <zack@debian.org>  Sat, 22 Sep 2007 20:00:37 +0200
 
 vim-addon-manager (0.2) unstable; urgency=low
 
