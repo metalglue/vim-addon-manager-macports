@@ -1,4 +1,4 @@
-vim-addon-manager (0.3) UNRELEASED; urgency=low
+vim-addon-manager (0.3) unstable; urgency=low
 
   * debian/control
     - better long description
@@ -13,7 +13,7 @@ vim-addon-manager (0.3) UNRELEASED; urgency=low
   * add bash completion script contributed by Antonio Terceiro
     (closes: #440843); fix debian/*.install accordingly
 
- -- Stefano Zacchiroli <zack@debian.org>  Sat, 22 Sep 2007 20:00:37 +0200
+ -- Stefano Zacchiroli <zack@debian.org>  Mon, 24 Sep 2007 10:24:22 +0200
 
 vim-addon-manager (0.2) unstable; urgency=low
 
