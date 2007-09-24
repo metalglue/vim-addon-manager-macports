@@ -1,3 +1,9 @@
+vim-addon-manager (0.4) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Stefano Zacchiroli <zack@debian.org>  Mon, 24 Sep 2007 10:30:52 +0200
+
 vim-addon-manager (0.3) unstable; urgency=low
 
   * debian/control
