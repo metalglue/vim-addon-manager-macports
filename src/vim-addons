@@ -86,7 +86,7 @@ A description of the semantics of each command is reported below.
   argument
 
 :files
-  linst, one per line, the files composing the specified addons. Files are
+  list, one per line, the files composing the specified addons. Files are
   listed relative to components of the Vim runtimepath (see 'runtimepath' in
   the Vim help). Requires at least one addon argument
 
