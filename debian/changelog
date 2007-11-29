@@ -1,8 +1,11 @@
-vim-addon-manager (0.4) UNRELEASED; urgency=low
+vim-addon-manager (0.4) unstable; urgency=low
 
   * vim-addons manpage: fix typo, s/linst/list/ (closes: #446527)
+  * remove TODO.Debian, the only item was done in 0.3
+  * use "status" as the default command when none is given
+  * fix the license header of the vim-addons main executable to GPL v3
 
- -- Stefano Zacchiroli <zack@debian.org>  Sun, 14 Oct 2007 13:49:08 +0200
+ -- Stefano Zacchiroli <zack@debian.org>  Thu, 29 Nov 2007 14:26:52 +0100
 
 vim-addon-manager (0.3) unstable; urgency=low
 

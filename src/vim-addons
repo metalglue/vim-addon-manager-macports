@@ -21,7 +21,7 @@ vim-addons - command line manager of Vim add-ons
 
 == SYNOPSIS
 
-vim-addons [OPTION ...] COMMAND [ADDON ...]
+vim-addons [OPTION ...] [COMMAND [ADDON ...]]
 
 == DESCRIPTION
 
@@ -65,7 +65,8 @@ A description of the semantics of each command is reported below.
 
 :status
   show, one per line, the status of the addons available in the system. If one
-  or more addon arguments are specified only show the status of those addons
+  or more addon arguments are specified only show the status of those addons.
+  This is the default command if nothing is specified.
 
 :install
   install one or more addons under ~/.vim. Requires at least one addon argument
@@ -135,8 +136,8 @@ vim(1), vim-registry(5)
 Copyright (C) 2007 Stefano Zacchiroli
 
 This program is free software, you can redistribute it and/or modify it under
-the terms of the GNU General Public License version 2 as published by the
-Free Software Foundation; either version 2 of the License, or (at your
+the terms of the GNU General Public License version 3 as published by the
+Free Software Foundation; either version 3 of the License, or (at your
 option) any later version.
 
 =end
@@ -150,9 +151,9 @@ require 'vim/registry'
 def die_usage
   print <<EOS
 Usage:
-  vim-addons [OPTION ...] COMMAND [ADDON ...]
+  vim-addons [OPTION ...] [COMMAND [ADDON ...]]
 Commands:
-  list, status, install, remove, disable, amend, files, show
+  list, status (default command), install, remove, disable, amend, files, show
 Options:
   -h, --help          show this usage message and exit
   -q, --query         be quiet and make the output more parseable
@@ -217,7 +218,7 @@ def parse_cmdline
     die_usage
   end
   options[:target_dir] = options[:system_dir] if options[:system_wide]
-  die_usage unless cmd = ARGV.shift
+  cmd = 'status' unless cmd = ARGV.shift
   die_usage unless cmds.member? cmd
   die_usage if req_arg_cmds.member? cmd and ARGV.empty?
   [cmd, ARGV, options]
