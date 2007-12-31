@@ -1,3 +1,9 @@
+vim-addon-manager (0.5) UNRELEASED; urgency=low
+
+  * update standards-version, no changes needed
+
+ -- Stefano Zacchiroli <zack@debian.org>  Thu, 29 Nov 2007 14:33:31 +0100
+
 vim-addon-manager (0.4) unstable; urgency=low
 
   * vim-addons manpage: fix typo, s/linst/list/ (closes: #446527)

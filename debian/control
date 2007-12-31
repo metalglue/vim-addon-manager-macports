@@ -3,7 +3,7 @@ Section: editors
 Priority: extra
 Maintainer: Stefano Zacchiroli <zack@debian.org>
 Build-Depends: cdbs, debhelper (>= 5), rdtool
-Standards-Version: 3.7.2
+Standards-Version: 3.7.3
 Vcs-Svn: svn://svn.debian.org/svn/pkg-vim/trunk/packages/vim-addon-manager
 Vcs-Browser: http://svn.debian.org/wsvn/pkg-vim/trunk/packages/vim-addon-manager/
 
