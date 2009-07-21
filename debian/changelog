@@ -1,8 +1,10 @@
-vim-addon-manager (0.5) UNRELEASED; urgency=low
+vim-addon-manager (0.4.1) unstable; urgency=low
 
-  * update standards-version, no changes needed
+  * bump Standards-Version, no changes needed
+  * set "Debian Vim Maintainers" as Maintainer, no Uploaders for the
+    moment. So long.
 
- -- Stefano Zacchiroli <zack@debian.org>  Thu, 29 Nov 2007 14:33:31 +0100
+ -- Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>  Tue, 21 Jul 2009 13:19:28 +0200
 
 vim-addon-manager (0.4) unstable; urgency=low
 
