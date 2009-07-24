@@ -10,7 +10,9 @@ Vcs-Browser: http://git.debian.org/?p=pkg-vim/vim-addon-manager.git
 
 Package: vim-addon-manager
 Architecture: all
-Depends: ruby, vim-common, ${misc:Depends}
+Depends: ruby,
+# Need vim-common for helpztags
+ vim-common, ${misc:Depends}
 Recommends: vim | gvim
 Description: manager of addons for the Vim editor
  vim-addon-manager is a tool for managing addons for the Vim
