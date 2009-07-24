@@ -5,8 +5,8 @@ Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
 Uploaders: James Vega <jamessan@debian.org>
 Build-Depends: cdbs, debhelper (>= 5), rdtool
 Standards-Version: 3.8.2
-Vcs-Svn: svn://svn.debian.org/svn/pkg-vim/trunk/packages/vim-addon-manager
-Vcs-Browser: http://svn.debian.org/wsvn/pkg-vim/trunk/packages/vim-addon-manager/
+Vcs-Git: git://git.debian.org/git/pkg-vim/vim-addon-manager.git
+Vcs-Browser: http://git.debian.org/?p=pkg-vim/vim-addon-manager.git
 
 Package: vim-addon-manager
 Architecture: all
