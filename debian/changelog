@@ -1,3 +1,10 @@
+vim-addon-manager (0.4.2) UNRELEASED; urgency=low
+
+  * debian/control:
+    - Add myself as an uploader
+
+ -- James Vega <jamessan@debian.org>  Fri, 24 Jul 2009 19:56:48 +0200
+
 vim-addon-manager (0.4.1) unstable; urgency=low
 
   * bump Standards-Version, no changes needed

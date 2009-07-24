@@ -2,6 +2,7 @@ Source: vim-addon-manager
 Section: editors
 Priority: extra
 Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
+Uploaders: James Vega <jamessan@debian.org>
 Build-Depends: cdbs, debhelper (>= 5), rdtool
 Standards-Version: 3.8.2
 Vcs-Svn: svn://svn.debian.org/svn/pkg-vim/trunk/packages/vim-addon-manager
