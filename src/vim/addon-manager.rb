@@ -95,7 +95,7 @@ module Vim
       end
     end
 
-    def amend(addons)
+    def enable(addons)
       map_override_lines do |lines|
         addons.each do |addon|
           if not addon.disabled_by_line
@@ -111,6 +111,10 @@ module Vim
 	  end
         end
       end
+    end
+
+    def amend(addons)
+      enable(addons)
     end
 
     def show(addons)

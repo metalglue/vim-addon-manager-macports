@@ -82,7 +82,7 @@ A description of the semantics of each command is reported below.
   definitions which will inhibit the given addon to be used. Requires at least
   one addon argument
 
-:amend
+:enable
   undo the effects of a previous disable command. Requires at least one addon
   argument
 
@@ -153,7 +153,7 @@ def die_usage
 Usage:
   vim-addons [OPTION ...] [COMMAND [ADDON ...]]
 Commands:
-  list, status (default command), install, remove, disable, amend, files, show
+  list, status (default command), install, remove, disable, enable, files, show
 Options:
   -h, --help          show this usage message and exit
   -q, --query         be quiet and make the output more parseable
@@ -181,7 +181,7 @@ def parse_cmdline
     :query        => false,
     :system_wide  => false,
   }
-  cmds = %w{install remove disable amend list status files show}
+  cmds = %w{install remove disable enable list status files show}
   req_arg_cmds = # commands requiring >= 1 arg
     %w{install remove disable amend files}
   cmdline =
