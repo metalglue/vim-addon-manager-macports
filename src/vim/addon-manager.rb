@@ -100,11 +100,11 @@ module Vim
         addons.each do |addon|
           if not addon.disabled_by_line
             Vim.warn \
-              "#{addon} can't be amended (since it has no disabledby field)"
+              "#{addon} can't be enabled (since it has no disabledby field)"
             next
           end
 	  if lines.any? {|line| addon.is_disabled_by? line}
-	    Vim.info "amending disabled addon '#{addon}'"
+	    Vim.info "enabling disabled addon '#{addon}'"
 	    lines.reject! {|line| addon.is_disabled_by? line}
 	  else
 	    Vim.info "ignoring addon '#{addon}' which is enabled"
@@ -114,6 +114,8 @@ module Vim
     end
 
     def amend(addons)
+      Vim.warn "the 'amend' command is deprecated and will disappear in a " +
+               "future release.  Please use the 'enable' command instead."
       enable(addons)
     end
 

@@ -31,7 +31,7 @@ module Vim
     end
 
     def warn(s)
-      puts "Warning: #{s}"
+      $stderr.puts "Warning: #{s}"
     end
 
     def info(s)
