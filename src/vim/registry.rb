@@ -22,6 +22,8 @@ module Vim
   # - :installed
   # - :broken (missing_files attribute is then used to list not installed
   # files)
+  # - :unavailable (missing_files attribute is then used to list source files
+  # that weren't found)
   #
   AddonStatusStruct = Struct.new(:status, :missing_files)
 
@@ -36,18 +38,26 @@ module Vim
 
     def to_s
       if @disabled
-        'disabled'
+	'disabled'
       else
-        case status
-        when :installed
-            'installed'
-        when :not_installed
-            'removed'
-        when :broken
-            s = 'broken'
-            s << " (missing: #{missing_files.join ', '})" if Vim.verbose?
-            s
-        end
+	case status
+	when :installed
+	  'installed'
+	when :not_installed
+	  'removed'
+	when :broken
+	  s = 'broken'
+	  if Vim.verbose?
+	    s << " (missing: #{missing_files.join ', '})"
+	  end
+	  s
+	when :unavailable
+	  s = 'unavailable'
+	  if Vim.verbose?
+	    s << " (missing source files: #{missing_files.join ', '})"
+	  end
+	  s
+	end
       end
     end
 
@@ -77,35 +87,33 @@ module Vim
     # directory, and the system wide installation directory.
     # A status is a ternary value: :not_installed (the addon is not installed
     # at all), :installed (the addon is completely installed), :broken (the
-    # addon is only partially installed)
+    # addon is only partially installed), :unavailable (source files are
+    # missing)
     #
     def status(target_dir)
-      expected = @files.collect {|f| File.join(target_dir, f)}
-      installed = expected.select do |f|
-        case
-        when (File.exist? f)
-          true
-        #when (File.symlink? f)
-          #(File.readlink f) ==
-          #(File.join @basedir, f.gsub(/^#{Regexp.escape target_dir}\/*/, ''))
-        #when (File.file? f)
-          #true
-        else
-          false
-        end
+      expected_dest = @files.collect {|f| File.join(target_dir, f)}
+      installed = expected_dest.select do |f|
+	File.exist? f
+      end
+      expected_src = @files.collect {|f| File.join(@basedir, f)}
+      available = expected_src.select do |f|
+	File.exist? f
       end
 
       status =
-        if installed.size == expected.size
-          AddonStatus.new :installed
-        elsif installed.size == 0
-          AddonStatus.new :not_installed
-        else
-          missing = expected - installed
-          prefix = /^#{Regexp.escape target_dir}\/+/o
-          missing.collect! {|f| f.gsub(prefix, '')}
-          AddonStatus.new(:broken, missing)
-        end
+	if available.size != expected_src.size
+	  missing = expected_src - available
+	  AddonStatus.new(:unavailable, missing)
+	elsif installed.size == expected_dest.size
+	  AddonStatus.new :installed
+	elsif installed.size == 0
+	  AddonStatus.new :not_installed
+	else
+	  missing = expected - installed
+	  prefix = /^#{Regexp.escape target_dir}\/+/o
+	  missing.collect! {|f| f.gsub(prefix, '')}
+	  AddonStatus.new(:broken, missing)
+	end
 
       status.disabled = is_disabled_in? target_dir
       status

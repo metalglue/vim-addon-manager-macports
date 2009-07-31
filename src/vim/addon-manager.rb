@@ -33,7 +33,7 @@ module Vim
 	symlink = lambda do |file|
 	  dest = File.join(@target_dir, file)
 	  dest_dir = File.dirname dest
-	  FileUtils.mkdir_p dest_dir unless File.directory? dest_dir
+	  FileUtils.mkdir_p dest_dir
 	  FileUtils.ln_sf(File.join(base_dir, file), dest)
 	end
 	status = addon.status(@target_dir)
@@ -41,13 +41,17 @@ module Vim
 	when :broken
 	  Vim.info "installing broken addon '#{addon}'"
 	  status.missing_files.each(&symlink)
-          installed_files.concat(status.missing_files.to_a)
+	  installed_files.concat(status.missing_files.to_a)
 	when :not_installed
 	  Vim.info "installing removed addon '#{addon}'"
 	  addon.files.each(&symlink)
-          installed_files.concat(addon.files.to_a)
-        else
-          Vim.info "ignoring '#{addon}' which is neither removed nor broken"
+	  installed_files.concat(addon.files.to_a)
+	when :unavailable
+	  s = "ignoring '#{addon}' which is missing source files"
+	  s << "\n- #{status.missing_files.join "\n- "}" if Vim.verbose?
+	  Vim.warn s
+	else
+	  Vim.info "ignoring '#{addon}' which is neither removed nor broken"
 	end
       end
       rebuild_tags(installed_files)

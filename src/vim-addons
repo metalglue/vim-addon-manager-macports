@@ -51,6 +51,10 @@ with respect to a user Vim configuration, in one of the following states:
   only some of the files composing the addon are installed under ~/.vim. The
   addon is probably not working for the current user
 
+:unavailable
+  some (or all) of the files composing the addon are missing from the source
+  directory
+
 === COMMANDS
 
 A number of commands can be given to vim-addons to inspect or alter the status
