@@ -58,24 +58,33 @@ module Vim
     end
 
     def remove(addons)
-      # TODO remove empty directories (recursively toward the top of ~/.vim/,
-      # a la rmdir -p)
       removed_files = []
-      rmlink = lambda {|file| File.delete(File.join(@target_dir, file)) }
+      rmdirs = lambda do |file|
+	File.delete(File.join(@target_dir, file))
+	paths = File.split(File.dirname(file))
+	while paths.size
+	  begin
+	    FileUtils.rmdir(File.join(@target_dir, paths))
+	  rescue Errno::ENOTEMPTY
+	    break
+	  end
+	  paths.pop
+	end
+      end
       addons.each do |addon|
 	status = addon.status(@target_dir)
 	case status.status
 	when :installed
 	  Vim.info "removing installed addon '#{addon}'"
-	  addon.files.each(&rmlink)
-          removed_files.concat(addon.files.to_a)
+	  addon.files.each(&rmdirs)
+	  removed_files.concat(addon.files.to_a)
 	when :broken
 	  Vim.info "removing broken addon '#{addon}'"
-          files = (addon.files - status.missing_files)
-	  files.each(&rmlink)
-          removed_files.concat(files.to_a)
-        else
-          Vim.info "ignoring '#{addon}' which is neither installed nor broken"
+	  files = (addon.files - status.missing_files)
+	  files.each(&rmdirs)
+	  removed_files.concat(files.to_a)
+	else
+	  Vim.info "ignoring '#{addon}' which is neither installed nor broken"
 	end
       end
       rebuild_tags(removed_files)
@@ -133,7 +142,7 @@ module Vim
     end
 
     private
-    
+
     def map_override_lines
       override_lines = []
       override_file = Vim.override_file @target_dir
