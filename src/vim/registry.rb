@@ -109,7 +109,7 @@ module Vim
 	elsif installed.size == 0
 	  AddonStatus.new :not_installed
 	else
-	  missing = expected - installed
+	  missing = expected_dest - installed
 	  prefix = /^#{Regexp.escape target_dir}\/+/o
 	  missing.collect! {|f| f.gsub(prefix, '')}
 	  AddonStatus.new(:broken, missing)
