@@ -3,6 +3,7 @@
 # vim-addons: command line manager of Vim addons
 #
 # Copyright (C) 2007 Stefano Zacchiroli
+# Copyright (C) 2009 James Vega
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -10,7 +11,6 @@
 # (at your option) any later version.
 #
 # Created:    Tue, 16 Jan 2007 10:04:20 +0100 zack
-# Last-Modified:  $Id: vim-addons 872 2007-01-28 18:31:41Z zack $
 #
 
 =begin
@@ -33,23 +33,25 @@ registry of Vim addons (see vim-registry(5)). Each system-wide addon can be,
 with respect to a user Vim configuration, in one of the following states:
 
 :installed
-  all of the files composing the addon are installed (i.e. symlinked) somewhere
-  under ~/.vim. The addon is fully functional for the current user
+  all of the files composing the addon are installed (i.e. symlinked) to their
+  respective places under the target directory. The addon is fully functional
+  for the current user
 
 :removed
-  the files composing the addon are not installed under ~/.vim. The addon might
-  still be working for the current user if it is installed system-wide by the
-  local administrator
+  the files composing the addon are not installed under the target directory.
+  The addon might still be working for the current user if it is installed
+  system-wide by the local administrator
 
 :disabled
-  the files composing the addon are not installed under ~/.vim, but the addon
-  is installed system-wide. However, the addon has been disabled for the
-  current user explicitely requiring so via some configuration line in
-  ~/.vim/plugin/vim-addons.vim. The addon is not working for the current user
+  the files composing the addon are not installed under the target directory,
+  but the addon is installed system-wide. However, the addon has been disabled
+  for the current user explicitely via some configuration line in
+  plugin/vim-addons.vim under the target directory. The addon is not working
+  for the current user
 
 :broken
-  only some of the files composing the addon are installed under ~/.vim. The
-  addon is probably not working for the current user
+  only some of the files composing the addon are installed under the target
+  directory. The addon is probably not working for the current user
 
 :unavailable
   some (or all) of the files composing the addon are missing from the source
@@ -73,18 +75,20 @@ A description of the semantics of each command is reported below.
   This is the default command if nothing is specified.
 
 :install
-  install one or more addons under ~/.vim. Requires at least one addon argument
+  install one or more addons under the target directory. Requires at least one
+  addon argument
 
 :remove
-  remove one or more addons from ~/.vim. Requires at least one addon argument
+  remove one or more addons from the target directory. Requires at least one
+  addon argument
 
 :disable
   disable one or more addons to be used by the current user. Usually used for
   addons which are system-wide enabled by the local administrator but that the
   current user does not want to be used. Using this command will automatically
-  change the content of ~/.vim/plugin/vim-addons.vim, probably adding let
-  definitions which will inhibit the given addon to be used. Requires at least
-  one addon argument
+  change the content of plugin/vim-addons.vim under the target directory,
+  probably adding ":let" commands which will inhibit the given addon from being
+  used.  Requires at least one addon argument
 
 :enable
   undo the effects of a previous disable command. Requires at least one addon
@@ -130,6 +134,7 @@ All commands accept the following options:
 == AUTHOR
 
 Stefano Zacchiroli <zack@debian.org>
+James Vega <jamessan@debian.org>
 
 == SEE ALSO
 
@@ -138,6 +143,7 @@ vim(1), vim-registry(5)
 == COPYRIGHT
 
 Copyright (C) 2007 Stefano Zacchiroli
+Copyright (C) 2009 James Vega
 
 This program is free software, you can redistribute it and/or modify it under
 the terms of the GNU General Public License version 3 as published by the
