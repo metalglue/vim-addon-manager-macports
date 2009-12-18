@@ -39,11 +39,11 @@ module Vim
 	status = addon.status(@target_dir)
 	case status.status
 	when :broken
-	  Vim.info "installing broken addon '#{addon}'"
+	  Vim.info "installing broken addon '#{addon}' to #{@target_dir}"
 	  status.missing_files.each(&symlink)
 	  installed_files.concat(status.missing_files.to_a)
 	when :not_installed
-	  Vim.info "installing removed addon '#{addon}'"
+	  Vim.info "installing removed addon '#{addon}' to #{@target_dir}"
 	  addon.files.each(&symlink)
 	  installed_files.concat(addon.files.to_a)
 	when :unavailable
@@ -75,11 +75,11 @@ module Vim
 	status = addon.status(@target_dir)
 	case status.status
 	when :installed
-	  Vim.info "removing installed addon '#{addon}'"
+	  Vim.info "removing installed addon '#{addon}' from #{@target_dir}"
 	  addon.files.each(&rmdirs)
 	  removed_files.concat(addon.files.to_a)
 	when :broken
-	  Vim.info "removing broken addon '#{addon}'"
+	  Vim.info "removing broken addon '#{addon}' from #{@target_dir}"
 	  files = (addon.files - status.missing_files)
 	  files.each(&rmdirs)
 	  removed_files.concat(files.to_a)
