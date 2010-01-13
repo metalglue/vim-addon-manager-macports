@@ -45,7 +45,7 @@ with respect to a user Vim configuration, in one of the following states:
 :disabled
   the files composing the addon are not installed under the target directory,
   but the addon is installed system-wide. However, the addon has been disabled
-  for the current user explicitely via some configuration line in
+  for the current user explicitly via some configuration line in
   plugin/vim-addons.vim under the target directory. The addon is not working
   for the current user
 
