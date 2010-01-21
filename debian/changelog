@@ -1,4 +1,4 @@
-vim-addon-manager (0.4.2) UNRELEASED; urgency=low
+vim-addon-manager (0.4.2) unstable; urgency=low
 
   * debian/control:
     - Add myself as an uploader
@@ -14,7 +14,7 @@ vim-addon-manager (0.4.2) UNRELEASED; urgency=low
   * Fix a spelling error in vim-addons(1).
   * Add a man page describing the registry file format.  (Closes: #457040)
 
- -- James Vega <jamessan@debian.org>  Fri, 24 Jul 2009 19:56:48 +0200
+ -- James Vega <jamessan@debian.org>  Wed, 20 Jan 2010 19:23:04 -0500
 
 vim-addon-manager (0.4.1) unstable; urgency=low
 
