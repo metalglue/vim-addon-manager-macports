@@ -12,6 +12,7 @@ vim-addon-manager (0.4.2) UNRELEASED; urgency=low
   * Include the target directory in the install/remove informational messages.
     (Closes: #499563)
   * Fix a spelling error in vim-addons(1).
+  * Add a man page describing the registry file format.  (Closes: #457040)
 
  -- James Vega <jamessan@debian.org>  Fri, 24 Jul 2009 19:56:48 +0200
 
