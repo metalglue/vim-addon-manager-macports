@@ -61,7 +61,8 @@ module Vim
       removed_files = []
       rmdirs = lambda do |file|
 	File.delete(File.join(@target_dir, file))
-	paths = File.split(File.dirname(file))
+	dir = File.dirname(file)
+	paths = (dir.include? File::Separator) ? File.split(dir) : [dir]
 	while paths.size
 	  begin
 	    FileUtils.rmdir(File.join(@target_dir, paths))

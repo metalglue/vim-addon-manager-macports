@@ -1,3 +1,9 @@
+vim-addon-manager (0.4.3) UNRELEASED; urgency=low
+
+  * Don't try to remove “/path/to/addons/.”.  (Closes: #566186)
+
+ -- James Vega <jamessan@debian.org>  Thu, 21 Jan 2010 23:49:47 -0500
+
 vim-addon-manager (0.4.2) unstable; urgency=low
 
   * debian/control:
