@@ -88,7 +88,16 @@ module Vim
 	  Vim.info "ignoring '#{addon}' which is neither installed nor broken"
 	end
       end
-      rebuild_tags(removed_files)
+      # Try to clean up the tags file and doc dir if it's empty
+      tagfile = File.join(@target_dir, 'doc', 'tags')
+      if File.exists? tagfile
+	File.unlink tagfile
+	begin
+	  FileUtils.rmdir File.join(@target_dir, 'doc')
+	rescue Errno::ENOTEMPTY
+	  rebuild_tags(removed_files)
+	end
+      end
     end
 
     def disable(addons)
