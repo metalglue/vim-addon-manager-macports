@@ -1,10 +1,10 @@
-vim-addon-manager (0.4.3) UNRELEASED; urgency=low
+vim-addon-manager (0.4.3) unstable; urgency=low
 
   * Don't try to remove “/path/to/addons/.”.  (Closes: #566186)
   * Do not regenerate the helptags after removing the last
     documentation-providing addon.  Simply remove the docs directory instead.
 
- -- James Vega <jamessan@debian.org>  Thu, 21 Jan 2010 23:49:47 -0500
+ -- James Vega <jamessan@debian.org>  Thu, 21 Jan 2010 23:55:41 -0500
 
 vim-addon-manager (0.4.2) unstable; urgency=low
 
