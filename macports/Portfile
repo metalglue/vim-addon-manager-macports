@@ -1,0 +1,9 @@
+# vim: set ft=tcl et sw=4 ts=4 sts=4 :
+PortSystem          1.0
+name                vim-addon-manager
+version             0.4.3a
+categories          sysutils
+maintainers         norioxkimura@gmail.com
+description         vim-addon-manager
+long_description    vim-addon-manager
+master_sites        http://blaise.pinklattice.com/macports/distfiles/
