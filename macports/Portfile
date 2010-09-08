@@ -7,3 +7,4 @@ maintainers         norioxkimura@gmail.com
 description         vim-addon-manager
 long_description    vim-addon-manager
 master_sites        http://blaise.pinklattice.com/macports/distfiles/
+use_configure       no
